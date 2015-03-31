@@ -18,6 +18,7 @@
 #
 
 import time
+import itertools
 
 NAME = 'Tvplexend'
 CACHE_TIME = 60
@@ -133,7 +134,7 @@ class Tvheadend(object):
         entries = Tvheadend.fetch('/api/dvr/entry/grid_finished')['entries']
         upcoming = Tvheadend.fetch('/api/dvr/entry/grid_upcoming')['entries']
 
-        return dict((entry['filename'], entry) for entry in (entries + upcoming))
+        return dict((entry['filename'], entry) for entry in itertools.chain(entries, upcoming))
 
     @staticmethod
     def fetch(path, headers=dict(), values=None):
