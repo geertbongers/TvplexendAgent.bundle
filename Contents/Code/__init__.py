@@ -131,7 +131,8 @@ class Tvheadend(object):
     @staticmethod
     def Recordings():
         entries = Tvheadend.fetch('/api/dvr/entry/grid_finished')['entries']
-        return dict((entry['filename'], entry) for entry in entries)
+        grid_upcoming = Tvheadend.fetch('/api/dvr/entry/grid_upcoming')['entries']
+        return dict((entry['filename'], entry) for entry in (entries + upcoming))
 
     @staticmethod
     def fetch(path, headers=dict(), values=None):
