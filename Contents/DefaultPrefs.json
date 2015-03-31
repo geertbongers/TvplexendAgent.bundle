@@ -23,5 +23,11 @@
         "label":    "Include date and time of recording in title",
         "type":     "bool",
         "default":  "false"
+    },
+    {
+        "id":       "includeSubtitleInTitle",
+        "label":    "Include the subtitle in title",
+        "type":     "bool",
+        "default":  "false"
     }
 ]

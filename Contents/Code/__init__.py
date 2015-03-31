@@ -92,8 +92,15 @@ class TvplexendAgent(Agent.Movies):
 
         title = recording['disp_title']
 
+        if Prefs['includeSubtitleInTitle']:
+            subTitle = recording['disp_subtitle']
+            title = '%s ★ %s' % (title, subTitle)
+
         if Prefs['includeDatetimeInTitle']:
             title = '%s (%s %s)' % (title, day, start)
+
+        directory = recording['directory']
+        metadata.collections.add(directory)
 
         metadata.title = title
         metadata.originally_available_at = startDateTime.date()
