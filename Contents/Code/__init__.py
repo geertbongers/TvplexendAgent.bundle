@@ -17,7 +17,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import base64, time
+import base64
+import time
+import itertools
 
 NAME = 'Tvplexend'
 CACHE_TIME = 60
@@ -96,8 +98,16 @@ class TvplexendAgent(Agent.Movies):
 
         title = recording['disp_title']
 
+        if Prefs['includeSubtitleInTitle']:
+            subTitle = recording['disp_subtitle']
+            if len(subTitle) > 0:
+                title = '%s ★ %s' % (title, subTitle)
+
         if Prefs['includeDatetimeInTitle']:
             title = '%s (%s %s)' % (title, day, start)
+
+        if 'directory' in recording:
+            metadata.collections.add(recording['directory'])
 
         metadata.title = title
         metadata.originally_available_at = startDateTime.date()
@@ -127,6 +137,11 @@ class Tvheadend(object):
     @staticmethod
     def Recordings():
         entries = Tvheadend.fetch('/api/dvr/entry/grid_finished')['entries']
+        upcoming = Tvheadend.fetch('/api/dvr/entry/grid_upcoming')['entries']
+        for upc in upcoming:
+            if 'filename' in upc:
+                entries.append(upc)
+
         return dict((entry['filename'], entry) for entry in entries)
 
     @staticmethod
